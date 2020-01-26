@@ -12,15 +12,15 @@ import Data.String (Pattern(..), Replacement(..), joinWith, replaceAll)
 import Text.Parsing.Simple (Parser, char, int, optionMaybe, satisfy, skipSpaces, someChar, string, word)
 import Text.Util (capitalize)
 
-isSeparator :: Char -> Boolean
-isSeparator = (_ `elem` [ ':', ' ', '\\', '-', '{', '\n' ])
-
 type StringParser
   = Parser String String
 
 -- | Parse each value until we hit a separator
 parseStr :: StringParser
-parseStr = someChar (satisfy (not <<< isSeparator))
+parseStr = someChar <<< satisfy $ not <<< isSeparator
+  where
+  isSeparator :: Char -> Boolean
+  isSeparator = (_ `elem` [ ':', ' ', '\\', '-', '{', '\n' ])
 
 -- | Handle negative values. For example .-bm-16 would parse to mNeg16
 parseNegative :: StringParser
@@ -45,8 +45,8 @@ handleStr = parseNegative <|> parseStr
 
 modifier :: StringParser
 modifier = do
-  x <- optionMaybe (string "\\:")
-  _ <- guard (isNothing x) (string "-")
+  x <- optionMaybe $ string "\\:"
+  _ <- guard (isNothing x) $ string "-"
   str <- fromMaybe "" <<< capitalize <$> (handleStr <|> parseNumber <|> parseFraction)
   pure str
 
