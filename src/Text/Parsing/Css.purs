@@ -1,4 +1,4 @@
-module Css
+module Text.Parsing.Css
   ( parseName, parseClass
   ) where
 
@@ -25,6 +25,7 @@ isSeparator = (_ `elem` separators)
 parseStr :: Parser String String
 parseStr = someChar (satisfy (not <<< isSeparator))
 
+-- | Handle negative values. For example .-bm-16 would parse to mNeg16
 parseNegative :: Parser String String
 parseNegative = do
   _ <- char '-'
@@ -34,6 +35,7 @@ parseNegative = do
 parseNumber :: Parser String String
 parseNumber = show <$> int
 
+-- | Handle fraction values. For example .w-11/12 would become w11Over12
 parseFraction :: Parser String String
 parseFraction = do
   x <- parseNumber
@@ -54,12 +56,14 @@ modifier = do
   str <- fromMaybe "" <<< capitalize <$> (handleStr <|> parseNumber <|> parseFraction)
   pure str
 
+-- | Parse the tailwind class name
 parseClass :: Parser String String
 parseClass = do
   skipSpaces
   _ <- char '.'
   replaceAll (Pattern "\\") (Replacement "") <$> word
 
+-- | Parse the function name
 parseName :: Parser String String
 parseName = do
   skipSpaces

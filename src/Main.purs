@@ -1,24 +1,23 @@
-module Main where
+module Main (main) where
 
 import Prelude
 import Control.Monad.Transformerless.Except (Except, runExcept)
-import Css (parseClass, parseName)
 import Data.Either (hush)
 import Data.Generic.Rep (class Generic)
 import Data.Generic.Rep.Show (genericShow)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String (joinWith)
 import Effect (Effect)
-import Effect.Class.Console (logShow)
 import Effect.Console (log)
 import Node.Encoding (Encoding(..))
-import Node.FS.Sync (readFile, readTextFile, writeTextFile)
+import Node.FS.Sync (readTextFile, writeTextFile)
 import Node.Path (FilePath)
-import Options.Applicative (Parser, ParserInfo, ReadM, command, completeWith, execParser, fullDesc, help, helper, info, long, maybeReader, metavar, option, progDesc, short, showDefault, strOption, subparser, switch, value, (<**>))
+import Options.Applicative (Parser, ParserInfo, ReadM, completeWith, execParser, fullDesc, help, helper, info, long, maybeReader, metavar, option, progDesc, short, showDefault, strOption, value, (<**>))
 import Options.Applicative.Internal.Utils (lines)
 import Templates.Purescript as Purescript
+import Text.Parsing.Css (parseClass, parseName)
 import Text.Parsing.Simple (parse)
-import Types (Class(..))
+import Types (Class)
 
 data Lang
   = ReasonML

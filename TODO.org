@@ -1,0 +1,10 @@
+#+TITLE: Todo
+#+PRIORITIES: A B C
+
+* Immediate plans
+** [ ] [#A] Get [[file:src/Text/Parsing/Css.purs][Css.purs]] to generate the ~Class~ type defined [[file:src/Types.purs][here]]
+** [ ] [#A] Create an abstract type for ~Language~
+    This would allow me to have a declarative way of adding support for new languages
+** [ ] [#B] Add a dhall configuration file and also allow the user to set environment variables
+** [ ] [#B] Turn the users spacing values into different functions
+** [ ] [#C] Allow the user to switch between ~camelCase~ ~PascalCase~ ~snake_case~ and ~kebab-case~

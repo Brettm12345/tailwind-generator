@@ -1,4 +1,4 @@
-module Templates.Purescript where
+module Data.Templates.Purescript (generate, save) where
 
 import Prelude
 import Data.String (joinWith)
