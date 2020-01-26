@@ -5,51 +5,45 @@ module Text.Parsing.Css
 import Prelude
 import Control.Alt ((<|>))
 import Data.Array as Array
-import Data.Char.Unicode (toUpper)
 import Data.List (elem, many)
-import Data.Maybe (Maybe, fromMaybe, isNothing)
+import Data.Maybe (fromMaybe, isNothing)
 import Data.Monoid (guard)
 import Data.String (Pattern(..), Replacement(..), joinWith, replaceAll)
-import Data.String.CodeUnits as String
-import Text.Parsing.Simple (Parser, char, int, optionMaybe, satisfy, skipMany, skipSpaces, someChar, space, string, word)
-
-spaces :: Parser String Unit
-spaces = skipMany space
-
-separators :: Array Char
-separators = [ ':', ' ', '\\', '-', '{', '\n' ]
+import Text.Parsing.Simple (Parser, char, int, optionMaybe, satisfy, skipSpaces, someChar, string, word)
+import Text.Util (capitalize)
 
 isSeparator :: Char -> Boolean
-isSeparator = (_ `elem` separators)
+isSeparator = (_ `elem` [ ':', ' ', '\\', '-', '{', '\n' ])
 
-parseStr :: Parser String String
+type StringParser
+  = Parser String String
+
+-- | Parse each value until we hit a separator
+parseStr :: StringParser
 parseStr = someChar (satisfy (not <<< isSeparator))
 
 -- | Handle negative values. For example .-bm-16 would parse to mNeg16
-parseNegative :: Parser String String
+parseNegative :: StringParser
 parseNegative = do
   _ <- char '-'
   str <- parseStr
   pure $ str <> "Neg"
 
-parseNumber :: Parser String String
+parseNumber :: StringParser
 parseNumber = show <$> int
 
 -- | Handle fraction values. For example .w-11/12 would become w11Over12
-parseFraction :: Parser String String
+parseFraction :: StringParser
 parseFraction = do
   x <- parseNumber
   _ <- string "\\/"
   y <- parseNumber
   pure $ x <> "Over" <> y
 
-handleStr :: Parser String String
+handleStr :: StringParser
 handleStr = parseNegative <|> parseStr
 
-capitalize :: String -> Maybe String
-capitalize = map (\a -> (String.singleton (toUpper a.head)) <> a.tail) <<< String.uncons
-
-modifier :: Parser String String
+modifier :: StringParser
 modifier = do
   x <- optionMaybe (string "\\:")
   _ <- guard (isNothing x) (string "-")
@@ -57,14 +51,14 @@ modifier = do
   pure str
 
 -- | Parse the tailwind class name
-parseClass :: Parser String String
+parseClass :: StringParser
 parseClass = do
   skipSpaces
   _ <- char '.'
   replaceAll (Pattern "\\") (Replacement "") <$> word
 
 -- | Parse the function name
-parseName :: Parser String String
+parseName :: StringParser
 parseName = do
   skipSpaces
   _ <- char '.'
