@@ -10,7 +10,7 @@ import Text.Parsing.Simple (parse)
 
 main :: Effect Unit
 main = do
-  log (joinWith "\n" $ map doParse $ lines testString)
+  log $ joinWith "\n" $ map doParse $ lines testString
   where
   doParse = show <<< parse parseClass
 
