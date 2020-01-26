@@ -14,7 +14,7 @@ import Node.FS.Sync (readTextFile, writeTextFile)
 import Node.Path (FilePath)
 import Options.Applicative (Parser, ParserInfo, ReadM, completeWith, execParser, fullDesc, help, helper, info, long, maybeReader, metavar, option, progDesc, short, showDefault, strOption, value, (<**>))
 import Options.Applicative.Internal.Utils (lines)
-import Templates.Purescript as Purescript
+import Data.Templates.Purescript as Purescript
 import Text.Parsing.Css (parseClass, parseName)
 import Text.Parsing.Simple (parse)
 import Types (Class)

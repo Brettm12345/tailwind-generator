@@ -1,7 +1,7 @@
 module Test.Main where
 
 import Prelude
-import Css (parseClass)
+import Text.Parsing.Css (parseClass)
 import Data.String (joinWith)
 import Effect (Effect)
 import Effect.Console (log)
