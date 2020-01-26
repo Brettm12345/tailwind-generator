@@ -2,6 +2,7 @@
 #+PRIORITIES: A B C
 
 * Immediate plans
+** [ ] [#A] Write concrete tests for [[file:src/Text/Parsing/Css.purs][Css.purs]]
 ** [ ] [#A] Get [[file:src/Text/Parsing/Css.purs][Css.purs]] to generate the ~Class~ type defined [[file:src/Types.purs][here]]
 ** [ ] [#A] Create an abstract type for ~Language~
     This would allow me to have a declarative way of adding support for new languages
